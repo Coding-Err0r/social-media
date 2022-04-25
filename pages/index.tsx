@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import {useSession , UserButton ,useUser} from '@clerk/nextjs'
-import Navbar from '../components/pageComponents/navbar'
+import Layout from '../components/layout';
+
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -8,9 +9,7 @@ const Home: NextPage = () => {
   console.log(user);
 
   return (
-    <div>
-      <Navbar/>
-    </div>
+    <Layout/>
     
   )
 }
