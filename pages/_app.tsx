@@ -12,13 +12,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   const isPublicPage = publicPages.includes(pathname);
   return (
     <ThemeProvider enableSystem={true} attribute="data-theme">
-    <ClerkProvider>
+      <ClerkProvider>
       {isPublicPage ? (
         <Component {...pageProps} />
       ) : (
         <>
           <SignedIn>
-            <Component {...pageProps} />
+              <Component {...pageProps} />
           </SignedIn>
           <SignedOut>
             <RedirectToSignIn />
