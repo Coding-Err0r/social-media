@@ -1,6 +1,7 @@
 import React from 'react'
 import {UserButton} from '@clerk/nextjs'
 import ModeToggle from '../utils/modeToogle'
+import CreatePost from './createPost'
 
 const Navbar = () => {
   return (
@@ -8,6 +9,7 @@ const Navbar = () => {
         <div className="flex-1">
             <a className="btn btn-ghost normal-case text-xl">Social Media</a>
         </div>
+        <CreatePost/>
         <div className="flex-none">
             <div className="dropdown dropdown-end">
            

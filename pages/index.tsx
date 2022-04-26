@@ -6,7 +6,7 @@ import Layout from '../components/layout';
 const Home: NextPage = () => {
   const session = useSession();
   const { user }:any = useUser();
-  console.log(user);
+  // console.log(user);
 
   return (
     <Layout/>
