@@ -1,5 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusIcon, XIcon } from '@heroicons/react/solid';
+import {
+  useLazyQuery,
+  gql,
+  useMutation,
+  useQuery
+} from '@apollo/client';
+import { useUser } from '@clerk/nextjs';
+
+const INSERTDATA = gql`
+  mutation Insert_User_Data(
+    $image: String!
+    $post: String!
+    $user_id: uuid!
+  ) {
+    insert_user_data_one(
+      object: { image: $image, post: $post, user_id: $user_id }
+    ) {
+      created_at
+    }
+  }
+`;
+
+const INSERTUSER = gql`
+  mutation ($email: String!, $name: String!) {
+    insert_users_one(object: { email: $email, name: $name }) {
+      id
+    }
+  }
+`;
+
+const SELECT = gql`
+  query GetAllUsersEmail {
+    users {
+      email
+      id
+    }
+  }
+`;
 
 const CreatePost = () => {
   const [post, setPost] = useState<string>('');
@@ -7,7 +45,7 @@ const CreatePost = () => {
   const [createObjectURL, setCreateObjectURL] = useState<any | null>(
     null
   );
-
+  const [insert_user_data_one] = useMutation(INSERTDATA);
   const handleURLConvertion = (event: any) => {
     if (event.target.files && event.target.files[0]) {
       const i = event.target.files[0];
@@ -17,14 +55,78 @@ const CreatePost = () => {
   };
 
   const saveToPublicDir = async (event: any) => {
+    const temp = new Date().toLocaleString();
+    const dateTime = temp.replace(/[^\w\s]/gi, '_');
+    const uploadFileName = dateTime + imagePath.name;
+    if (responseData !== undefined) {
+      responseData.map((user: any) => {
+        if (user.email === userEmail) {
+          insert_user_data_one({
+            variables: {
+              image: uploadFileName,
+              post: post,
+              user_id: user.id
+            }
+          })
+            .then(() => {
+              setPost('');
+              setImagePath('');
+              console.log('Inserted Users Post Data');
+            })
+            .catch((e: any) => {});
+        }
+      });
+    }
     const body = new FormData();
     body.append('file', imagePath);
-    // body.append('file', post);
+    body.append('fileName', uploadFileName);
     const response = await fetch('/api/upload', {
       method: 'POST',
       body
     });
   };
+
+  const { user }: any = useUser();
+  const [insert_users_one] = useMutation(INSERTUSER);
+  const { loading, error, data } = useQuery(SELECT);
+  const [responseData, setResponseData] = useState<
+    any[] | undefined
+  >();
+
+  let userEmail = user.primaryEmailAddress?.emailAddress;
+  let userName = user.fullName;
+  useEffect(() => {
+    try {
+      setResponseData(data.users);
+    } catch (e: any) {}
+  }, [loading]);
+
+  useEffect(() => {
+    if (responseData !== undefined) {
+      responseData.map((user: any) => {
+        if (user.email === userEmail) {
+          console.log('Email Exist');
+        } else {
+          if (userEmail !== null && userName !== null) {
+            insert_users_one({
+              variables: {
+                email: userEmail,
+                name: userName
+              }
+            })
+              .then(() => {
+                console.log('Inserted Data');
+              })
+              .catch((e: any) => {});
+          } else {
+            console.log('Failed To Insert');
+          }
+        }
+      });
+    } else {
+      console.log('No Data Found');
+    }
+  }, [responseData !== undefined]);
 
   return (
     <>

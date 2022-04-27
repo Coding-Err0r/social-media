@@ -5,25 +5,20 @@ var mv = require('mv');
 
 export const config = {
   api: {
-    bodyParser: true
+    bodyParser: false
   }
 };
 
 const Upload = async (req, res) => {
   const data = await new Promise((resolve, reject) => {
     const form = new IncomingForm();
-    const temp = new Date().toLocaleString();
-    const dateTime = temp.replace(/[^\w\s]/gi, '_');
 
     form.parse(req, (err, fields, files) => {
-      console.log(files);
       if (err) return reject(err);
       var oldPath = files.file.filepath;
-      var newPath = `./public/images/${
-        dateTime + files.file.originalFilename
-      }`;
+      var newPath = `./public/images/${fields.fileName}`;
       mv(oldPath, newPath, function (err) {});
-      res.status(200).json({ fields, files });
+      res.status(200).json({ uploadFileName });
     });
   });
 };
