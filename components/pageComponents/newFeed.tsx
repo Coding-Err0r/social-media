@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../utils/card';
-import { useQuery, gql } from '@apollo/client';
+import subscribe from '../../lib/subscribe';
 
-const POSTSUBSCRIPTION = gql`
+import useSWR from 'swr';
+
+const USER_SUBSCRIPTION = `
   subscription MySubscription {
-    user_data {
+    user_data(order_by: {created_at: desc}) {
       image
       post
       user {
@@ -13,17 +15,21 @@ const POSTSUBSCRIPTION = gql`
       created_at
     }
   }
+
 `;
 
 const NewFeed = () => {
-  const { data, loading, error } = useQuery(POSTSUBSCRIPTION);
-  const [postData, setPostData] = useState<any[] | undefined>([]);
+  const subscribeData = async (...args: any[]) => {
+    return subscribe(USER_SUBSCRIPTION);
+  };
+  const { data } = useSWR('subscription', subscribeData);
+  const [postData, setPostData] = useState<any[]>([]);
   useEffect(() => {
     try {
-      console.log(data);
       setPostData(data.user_data);
     } catch (e) {}
   }, [data]);
+
   return (
     <div className="flex flex-col justify-center items-center gap-y-6 p-6">
       {postData !== undefined &&
