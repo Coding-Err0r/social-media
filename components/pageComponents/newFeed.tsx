@@ -35,7 +35,7 @@ const NewFeed = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-y-6 p-6">
       {postData !== undefined &&
-        postData.user_data?.map((post: any, i) => {
+        postData.user_data?.map((post: any, i: any) => {
           return (
             <Card
               imageURL={post.image}

@@ -52,7 +52,7 @@ const Search = () => {
       </div>
       <div className="flex flex-col absolute left-0 right-0 top-0 bottom-0 m-auto pt-20">
         {searchData !== undefined && searchData?.length > 0
-          ? searchData.map((data, i) => {
+          ? searchData.map((data:any, i: any) => {
               return (
                 <SearchResult
                   title={data.post}
