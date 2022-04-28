@@ -10,7 +10,7 @@ import fetch from 'isomorphic-unfetch';
 const wsLink: any = process.browser
   ? new WebSocketLink({
       // if you instantiate in the server, the error will be thrown
-      uri: `ws://social-media-11.herokuapp.com/v1/graphql`,
+      uri: String(process.env.NEXT_PUBLIC_WEBSOCKET_URL),
       options: {
         lazy: true,
         reconnect: true,
@@ -22,7 +22,7 @@ const wsLink: any = process.browser
   : null;
 
 const httplink: any = new HttpLink({
-  uri: 'http://social-media-11.herokuapp.com/v1/graphql'
+  uri: process.env.NEXT_PUBLIC_HASURA_URL
 });
 
 const link = process.browser

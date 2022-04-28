@@ -129,7 +129,7 @@ const CreatePost = () => {
   }, [responseData !== undefined]);
 
   return (
-    <>
+    <div className="z-40">
       <label htmlFor="my-modal" role="button">
         <PlusIcon className="w-7 h-7" />
       </label>
@@ -200,7 +200,7 @@ const CreatePost = () => {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

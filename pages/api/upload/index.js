@@ -18,7 +18,7 @@ const Upload = async (req, res) => {
       var oldPath = files.file.filepath;
       var newPath = `./public/images/${fields.fileName}`;
       mv(oldPath, newPath, function (err) {});
-      res.status(200).json({ uploadFileName });
+      res.status(200).json({ fields });
     });
   });
 };

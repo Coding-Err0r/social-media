@@ -21,6 +21,7 @@
     "daisyui": "^2.14.2",
     "formidable": "^2.0.1",
     "graphql": "^16.4.0",
+    "graphql-request": "^4.2.0",
     "heroicons": "^1.0.6",
     "isomorphic-unfetch": "^3.1.0",
     "js-cookie": "^3.0.1",
