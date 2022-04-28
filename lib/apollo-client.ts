@@ -22,7 +22,7 @@ const wsLink: any = process.browser
   : null;
 
 const httplink: any = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_HASURA_URL
+  uri: String(process.env.NEXT_PUBLIC_HASURA_URL)
 });
 
 const link = process.browser

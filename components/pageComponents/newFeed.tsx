@@ -23,17 +23,19 @@ const NewFeed = () => {
     return subscribe(USER_SUBSCRIPTION);
   };
   const { data } = useSWR('subscription', subscribeData);
-  const [postData, setPostData] = useState<any[]>([]);
+  const [postData, setPostData] = useState<any>([]);
   useEffect(() => {
     try {
-      setPostData(data.user_data);
+      if (data !== undefined) {
+        setPostData(data);
+      }
     } catch (e) {}
   }, [data]);
 
   return (
     <div className="flex flex-col justify-center items-center gap-y-6 p-6">
       {postData !== undefined &&
-        postData.map((post: any, i) => {
+        postData.user_data?.map((post: any, i) => {
           return (
             <Card
               imageURL={post.image}
